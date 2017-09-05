@@ -1,0 +1,9 @@
+create table t ( id char(20), age int , primary key(id) );
+insert into t values ( '112341' , 18 );
+insert into t values ( '112343' , 88 );
+insert into t values ( '112345' , 38 );
+insert into t values ( '112342' , 8 );
+insert into t values ( '112344' , 28 );
+select * from t;
+delete from t where age < 20;
+select * from t;
