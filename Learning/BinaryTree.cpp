@@ -1,4 +1,15 @@
+/* 
+ *   Basic operations of BST (binary search tree) including:
+ *      pre order traversal
+ *      in order traversal
+ *      post order traversal
+ *      level order traversal
+ *      reverse tree
+ */
+
+
 #include <iostream>
+#include <vector>
 #include <stack>
 #include <queue>
 
@@ -13,41 +24,42 @@ struct TreeNode {
 
 
 
-void pre_order_recursive(TreeNode* root) {
+void pre_order_recursive(TreeNode* root, vector<int>& ans) {
     if (root != NULL) {
-        cout << root->val << ' ';
-        pre_order_recursive(root->left);
-        pre_order_recursive(root->right);
+        ans.push_back(root->val);
+        pre_order_recursive(root->left, ans);
+        pre_order_recursive(root->right, ans);
     }
 }
 
-void pre_order_non_recursive(TreeNode* root) {
-    stack<TreeNode*> s;
-    TreeNode* p = root;
+void pre_order_iteration(TreeNode* root, vector<int>& ans) {
+    if (root == NULL)
+        return;
     
-    while (p != NULL || !s.empty()) {
-        while (p != NULL) {
-            cout << p->val << ' ';
-            s.push(p);
-            p = p->left;
-        }
-        if (!s.empty()) {
-            p = s.top()->right;
-            s.pop();
-            // p = p->right;
-        }
+    TreeNode *p;
+    stack<TreeNode*> s;
+    s.push(root);
+    while (!s.empty()) {
+        p = s.top();
+        s.pop();
+        ans.push_back(p->val);
+        if (p->right)
+            s.push(p->right);
+        if (p->left)
+            s.push(p->left);
     }
 }
 
-void in_order_recursive(TreeNode* root) {
+
+void in_order_recursive(TreeNode* root, vector<int>& ans) {
     if (root != NULL) {
-        in_order_recursive(root->left);
-        cout << root->val << ' ';
-        in_order_recursive(root->right);
+        in_order_recursive(root->left, ans);
+        ans.push_back(root->val);
+        in_order_recursive(root->right, ans);
     }
 }
 
-void in_order_non_recursive(TreeNode* root) {
+void in_order_iteration(TreeNode* root, vector<int>& ans) {
     stack<TreeNode*> s;
     TreeNode* p = root;
 
@@ -59,22 +71,25 @@ void in_order_non_recursive(TreeNode* root) {
     
         if (!s.empty()) {
             p = s.top();
-            cout << p->val << ' ';
+            ans.push_back(p->val);
             s.pop();
             p = p->right;
         }
     }
 }
 
-void post_order_recursive(TreeNode* root) {
+void post_order_recursive(TreeNode* root, vector<int>& ans) {
     if (root != NULL) {
-        post_order_recursive(root->left);
-        post_order_recursive(root->right);
-        cout << root->val << ' ';
+        post_order_recursive(root->left, ans);
+        post_order_recursive(root->right, ans);
+        ans.push_back(root->val);
     }
 }
 
-void post_order_non_recursive(TreeNode* root) {
+void post_order_iteration(TreeNode* root, vector<int>& ans) {
+    if (root == NULL)
+        return;
+
     stack<TreeNode*> s;
     TreeNode* cur = NULL;
     TreeNode* pre = NULL;
@@ -84,21 +99,45 @@ void post_order_non_recursive(TreeNode* root) {
         cur = s.top();
         if ((cur->left == NULL && cur->right == NULL) ||
             (pre != NULL && (pre == cur->left || pre == cur->right))) {
-            cout << cur->val << ' ';
+            ans.push_back(cur->val);
             s.pop();
             pre = cur;
         }
         else {
-            if (cur->right != NULL)
+            if (cur->right)
                 s.push(cur->right);
-            if (cur->left != NULL)
+            if (cur->left)
                 s.push(cur->left);
         }
     }
 
 }
 
-void level_order(TreeNode* root) {
+void post_order_iteration_reverse(TreeNode* root, vector<int>& ans) {
+    if (root == NULL)
+        return;
+
+    TreeNode *p;
+    stack<TreeNode*> s;
+    vector<int> t;
+    s.push(root);
+
+    while (!s.empty()) {
+        p = s.top();
+        s.pop();
+        if (p->left) 
+            s.push(p->left);
+        if (p->right)
+            s.push(p->right);
+        t.push_back(p->val);
+    }
+
+    for (int i = t.size() - 1; i >= 0; i--)
+        ans.push_back(t[i]);
+}
+
+
+void level_order(TreeNode* root, vector<int>& ans) {
     if (root == NULL)
         return;
 
@@ -112,15 +151,71 @@ void level_order(TreeNode* root) {
             q.push(p->left);
         if (p->right != NULL)
             q.push(p->right);
-
-        cout << p->val << ' ';
+        ans.push_back(p->val);
         q.pop();
     }
+}
+
+void reverse_recursive(TreeNode* root) {
+    if (root == NULL)
+        return;
+    if (root->left == NULL && root->right == NULL)
+        return;
+    
+    TreeNode* tmp = NULL;
+    tmp = root->left;
+    root->left = root->right;
+    root->right = tmp;
+
+    if (root->left)
+        reverse_recursive(root->left);
+    if (root->right)
+        reverse_recursive(root->right);
+
+}
+
+void reverse_iteration(TreeNode* root) {
+    if (root == NULL)
+        return;
+    
+    queue<TreeNode*> q;
+    TreeNode* p;
+    q.push(root);
+
+    while(!q.empty()) {
+        p = q.front();
+        if (p->left)
+            q.push(p->left);
+        if (p->right)
+            q.push(p->right);
+
+        TreeNode* tmp = p->left;
+        p->left = p->right;
+        p->right = tmp;
+
+        q.pop();
+    }
+    
+}
+
+void printVector(const vector<int> &v) {
+    cout << '[';
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << ", ";
+    }
+    cout << ']' << endl;
 }
 
 int main() {
 
     // build Tree
+    /*
+                4
+              /   \
+             2     6
+            / \   / \
+           1   3 5   7
+    */
     TreeNode* root = new TreeNode(4);
     root->left = new TreeNode(2);
     root->right = new TreeNode(6);
@@ -131,27 +226,54 @@ int main() {
     cur->left = new TreeNode(5);
     cur->right = new TreeNode(7);
 
+    vector<int> ans;
+
     // pre order
-    pre_order_recursive(root);
-    cout << endl;
-    pre_order_non_recursive(root);
-    cout << endl;
+    ans.clear();
+    pre_order_recursive(root, ans);
+    printVector(ans);
 
-    // in order
-    in_order_recursive(root);
-    cout << endl;
-    in_order_non_recursive(root);
-    cout << endl;
+    ans.clear();
+    pre_order_iteration(root, ans);
+    printVector(ans);
 
-    // post order
-    post_order_recursive(root);
-    cout << endl;
-    post_order_non_recursive(root);
-    cout << endl;
+
+
+    // // in order
+    ans.clear();
+    in_order_recursive(root, ans);
+    printVector(ans);
+
+    ans.clear();
+    in_order_iteration(root, ans);
+    printVector(ans);
+
+
+    // // post order
+    ans.clear();
+    post_order_recursive(root, ans);
+    printVector(ans);
+
+    ans.clear();
+    post_order_iteration(root, ans);
+    printVector(ans);
+
+    ans.clear();
+    post_order_iteration_reverse(root, ans);
+    printVector(ans);
 
     // level order
-    level_order(root);
-    cout << endl;
+    ans.clear();
+    level_order(root, ans);
+    printVector(ans);
+
+
+    // reverse
+    ans.clear();
+    // reverse_recursive(root);
+    reverse_iteration(root);
+    level_order(root, ans);
+    printVector(ans);
 
     return 0;
 }
