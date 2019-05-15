@@ -13,6 +13,9 @@ class TopK {
     vector<int> TopK_random_select(const vector<int>& v, int k);
     vector<int> TopK_stl_nth_element(const vector<int>& v, int k);
 
+  private:
+    int partition(vector<int>& v, int l, int r);
+    void random_select(vector<int>& v, int l, int r, int k);
 };
 
 
@@ -52,23 +55,40 @@ bool cmp(const int& a, const int& b) {
 //         topK(l, mid, K, array);
 // }
 
+int TopK::partition(vector<int>& v, int l, int r) {
+    int pivot = l;
+    int mid = l + 1;
+    for (int i = mid; i < r; ++i) {
+        if (v[i] < v[pivot]) {
+            swap(v[mid++], v[i]);
+        }
+    }
+    --mid;
+    swap(v[pivot], v[mid]);
+    return mid;
+}
 
-// vector<int> TopK_RandomSelect(vector<int>& array, int K) {
-//     vector<int> ans;
-    
-//     topK(0, array.size(), K, array);
-    
-//     for (int i = 0; i < K; i++)
-//         ans.push_back(array[i]);
-//     return ans; 
+void TopK::random_select(vector<int>& v, int l, int r, int k) {
+    int n = r - l;
+    if (n < 2)
+        return;
 
-// }
+    int mid = partition(v, l, r);
+    int size_l = mid - l + 1;
+    int size_r = r - mid - 1;
+    if ( size_l == k)
+        return;
+    else if (size_l < k)
+        random_select(v, mid + 1, r, k - size_l);
+    else 
+        random_select(v, l, mid + 1, k);
+}
 
 // time: O(n) expected
 vector<int> TopK::TopK_random_select(const vector<int>& v, int k) {
     vector<int> tmp(v);
 
-    
+    random_select(tmp, 0, tmp.size(), k);    
 
     return vector<int>(tmp.begin(), tmp.begin() + k);;
 }
@@ -143,9 +163,8 @@ int main() {
     vector<int> ans1 = solution.TopK_sort(array, k);
     vector<int> ans2 = solution.TopK_heap(array, k);
     vector<int> ans3 = solution.TopK_partial_sort(array, k);
+    vector<int> ans4 = solution.TopK_random_select(array, k);
 
-    print(array);
-    cout << endl;
 
     sort(ans0.begin(), ans0.end());
     print(ans0);
@@ -161,5 +180,9 @@ int main() {
 
     sort(ans3.begin(), ans3.end());
     print(ans3);
+    cout << endl;
+
+    sort(ans4.begin(), ans4.end());
+    print(ans4);
 
 }

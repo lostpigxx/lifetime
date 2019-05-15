@@ -128,7 +128,7 @@ void quick_sort(vector<int>& v, int left, int right) {
     
     int mid = partition(v, left, right);
     quick_sort(v, left, mid + 1);
-    quick_sort(v, mid+1, right);
+    quick_sort(v, mid + 1, right);
 
 }
 
