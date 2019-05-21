@@ -2,3 +2,4 @@
 *.out
 .vscode
 test.cpp
+.DS_Store
