@@ -22,6 +22,10 @@ vector<int> Sort_stl(const vector<int>& array) {
 }
 
 
+/*
+    选择排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_select(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
@@ -38,6 +42,10 @@ vector<int> Sort_select(const vector<int>& array) {
     return v;
 }
 
+/*
+    冒泡排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_bubble(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
@@ -52,6 +60,11 @@ vector<int> Sort_bubble(const vector<int>& array) {
     return v;
 }
 
+
+/*
+    插入排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_insert(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
@@ -76,7 +89,10 @@ vector<int> Sort_insert(const vector<int>& array) {
 }
 
 
-
+/*
+    归并排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_merge(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
@@ -133,6 +149,10 @@ void quick_sort(vector<int>& v, int left, int right) {
 
 }
 
+/*
+    快速排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_quick(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
@@ -142,6 +162,11 @@ vector<int> Sort_quick(const vector<int>& array) {
     return v;
 }
 
+
+/*
+    堆排序
+    时间复杂度：平均 最差
+*/
 vector<int> Sort_heap_stl(const vector<int>& array) {
     vector<int> v(array);
     int n = v.size();
