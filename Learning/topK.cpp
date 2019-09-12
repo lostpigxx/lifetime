@@ -1,3 +1,8 @@
+/* 
+ *  TopK问题的多种解
+ */
+
+
 #include <iostream>
 #include <vector>
 #include <random>
@@ -31,30 +36,7 @@ bool cmp(const int& a, const int& b) {
     return a < b;
 }
 
-// int partition(int l, int r, vector<int>& array) {
-//     int pivot = array[l];
-//     int i = l + 1, j = r;
-//     while (true) {
-//         while (array[i] < pivot && i <= r) i++;
-//         while (array[j] > pivot && j >= l) j--;
-//         if (i < j)
-//             swap(array[i++], array[j++]);
-//         else 
-//             break;
-//     }
-//     return j;
-// }
 
-// void topK(int l, int r, int K, vector<int>& array) {
-//     print(array);
-
-//     int mid = partition(l, r, array);
-//     int left_length = mid - l + 1;
-//     if (left_length < K)
-//         topK(mid+1, r, K - left_length, array);
-//     else if (left_length > K)
-//         topK(l, mid, K, array);
-// }
 
 int TopK::partition(vector<int>& v, int l, int r) {
     int pivot = l;
@@ -77,7 +59,7 @@ void TopK::random_select(vector<int>& v, int l, int r, int k) {
     int mid = partition(v, l, r);
     int size_l = mid - l + 1;
     int size_r = r - mid - 1;
-    if ( size_l == k)
+    if (size_l == k)
         return;
     else if (size_l < k)
         random_select(v, mid + 1, r, k - size_l);
@@ -86,6 +68,7 @@ void TopK::random_select(vector<int>& v, int l, int r, int k) {
 }
 
 // time: O(n) expected
+// 类似快排
 vector<int> TopK::TopK_random_select(const vector<int>& v, int k) {
     vector<int> tmp(v);
 
@@ -94,7 +77,10 @@ vector<int> TopK::TopK_random_select(const vector<int>& v, int k) {
     return vector<int>(tmp.begin(), tmp.begin() + k);;
 }
 
+
+
 // time: O(nlogn)
+// 排序的解法
 vector<int> TopK::TopK_sort(const vector<int>& v, int k) {
     vector<int> tmp(v);
 
@@ -103,7 +89,10 @@ vector<int> TopK::TopK_sort(const vector<int>& v, int k) {
     return vector<int>(tmp.begin(), tmp.begin() + k);;
 }
 
-// time: O(klogn)
+
+
+// time: O((n-k)logk)
+// 最常用的方法，先对头k个元素建堆，然后对剩余n-k个元素分别进行堆操作
 vector<int> TopK::TopK_heap(const vector<int>& v, int k) {
     vector<int> tmp(v);
     
@@ -119,6 +108,8 @@ vector<int> TopK::TopK_heap(const vector<int>& v, int k) {
     return vector<int>(tmp.begin(), tmp.begin() + k);;
 }
 
+
+
 // time: O(n) expected
 vector<int> TopK::TopK_stl_nth_element(const vector<int>& v, int k) {
     vector<int> tmp(v);
@@ -127,6 +118,8 @@ vector<int> TopK::TopK_stl_nth_element(const vector<int>& v, int k) {
 
     return vector<int>(tmp.begin(), tmp.begin() + k);
 }
+
+
 
 // time: O(k * n)
 vector<int> TopK::TopK_partial_sort(const vector<int>& v, int k) {
