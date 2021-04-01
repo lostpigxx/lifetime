@@ -1,0 +1,8 @@
+[user]
+    email = simplelx@zju.edu.cn
+    name = LostPigxx
+[alias]
+    st = status
+    ci = commit
+    br = branch -v
+    ck = checkout
