@@ -2,6 +2,7 @@
 
 // this is an example, include your own .h file
 #include "lockFreeCuckoo.h"
+
 #include <iostream>
 #include <vector>
 
@@ -22,7 +23,7 @@ int main() {
 
     int numKey = (int)(TABLE_SIZE * LOAD_FACT);
 
-    // linear insertion 
+    // linear insertion
 	char *p = new char[6]{'h', 'e', 'l', 'l', 'o', 0};
     for (int i = 0; i < numKey; i++) {
         p[rand()%6] = ('a' + (rand()%26));
@@ -55,7 +56,7 @@ int main() {
     if (alldone) {
         printf("random non-existed key verify, All check success!\n");
     }
-    
+
     alldone = true;
     int counter = 0;
     // random deletion
@@ -77,7 +78,7 @@ int main() {
     //----------------------------next term--------------------
     delete myHash;
     myHash = new class lockFreeCuckoo<int>(TABLE_SIZE/2, TABLE_SIZE/2); // need customization
-    
+
     // random insertion
     vector<int> keys;
     p = new char[6]{'h', 'e', 'l', 'l', 'o', 0};
@@ -112,5 +113,5 @@ int main() {
     if (alldone) {
         printf("random deletion and verify, All check success!\n");
     }
-    
+
 }

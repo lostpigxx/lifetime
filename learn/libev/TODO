@@ -1,0 +1,2 @@
+1. libev如何传参？ 利用监视器的data变量
+2. libev 和 hiredis异步客户端的坑：   redisAsyncCommand必须要放在和loop相同的线程内

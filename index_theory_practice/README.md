@@ -2,7 +2,8 @@
 
 This is a project for a personal summary of learning various indexes, both theroy(paper reading, principle analysis, etc) and practice(code, benchmark result, etc)
 
-See the [github wiki](https://github.com/lostpigxx/index-theory-practice/wiki) for more explanation.
+# Directory
+1. lock-free cuckoo hash
 
 # License
 

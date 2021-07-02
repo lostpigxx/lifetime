@@ -3,7 +3,7 @@
 //
 // lockfree cuckoo hash
 // 无锁杜鹃哈希
- 
+
  #include <stdio.h>
  #include <stdlib.h>
  #include <iostream>
@@ -13,7 +13,7 @@
 
 using namespace std;
 
-template <class KeyType> 
+template <class KeyType>
 class KeyComparator {
 public:
 // Compare a and b. Return a negative value if a is less than b, 0 if they
@@ -64,7 +64,7 @@ public:
 	lockFreeCuckoo(size_t size1, size_t size2);
 	~lockFreeCuckoo();
     char* Search(KeyType key);
-	bool Insert(const char* address, const KeyType &key);    
+	bool Insert(const char* address, const KeyType &key);
     bool Delete(const KeyType &key);
     bool Contains(const KeyType &key) const;
 
@@ -72,7 +72,7 @@ public:
     char* nextValueAtKey();
 
 	size_t getSize();
-    void ensureCapacity(uint32_t capacity);	// resize	
+    void ensureCapacity(uint32_t capacity);	// resize
     void printTable();
 
 private:
@@ -81,13 +81,13 @@ private:
     bool Relocate(int tableNum , int pos);
     void helpRelocate(int table , int idx, bool initiator);
     void deleteDup(int idx1, Entry<KeyType> *ent1,int idx2,Entry<KeyType> *ent2);
-    
+
     int hash1(const KeyType key) const;
     int hash2(const KeyType key) const;
 
 private:
 	// KeyComparator不需要大家实现，但是key的比较需要由compare_来完成
-	KeyComparator<KeyType> const compare_;						
+	KeyComparator<KeyType> const compare_;
 
 };
 
@@ -194,7 +194,7 @@ void lockFreeCuckoo<KeyType>::helpRelocate(int which, int idx, bool initiator) {
 			if(extract_address(srcEntry) == NULL)
 				return;
 			// mark the flag
-			tmpEntry = (Entry<KeyType> *)((unsigned long)srcEntry | 1); 
+			tmpEntry = (Entry<KeyType> *)((unsigned long)srcEntry | 1);
 			atomic_compare_exchange_strong(&(tbl[which][idx]), &srcEntry, tmpEntry);
 			srcEntry = atomic_load_explicit(&tbl[which][idx], memory_order_seq_cst);
 		}
@@ -290,7 +290,7 @@ char* lockFreeCuckoo<KeyType>::Search(KeyType key)
 
 		if(checkCounter(cnt1,cnt2,ncnt1,ncnt2))
 			continue;
-		else 
+		else
 			return NIL;
 	}
 }
@@ -379,7 +379,7 @@ int lockFreeCuckoo<KeyType>::Find(KeyType key, Entry<KeyType> **ent1, Entry<KeyT
 
 		if(checkCounter(cnt1, cnt2, ncnt1, ncnt2))
 			continue;
-		else 
+		else
 			return NIL;
 	}
 }
@@ -472,8 +472,8 @@ template <class KeyType>
 bool lockFreeCuckoo<KeyType>::Insert(const char* address, const KeyType &key) {
 	Entry<KeyType> *newEntry = new Entry<KeyType>(key, address);
 	Entry<KeyType> *ent1 = NULL, *ent2 = NULL;
-	// shared_ptr<Entry<KeyType>> spent1(ent1); 
-	// shared_ptr<Entry<KeyType>> spent2(ent2); 
+	// shared_ptr<Entry<KeyType>> spent1(ent1);
+	// shared_ptr<Entry<KeyType>> spent2(ent2);
 	int cnt = 0;
 	int h1 = hash1(key);
 	int h2 = hash2(key);
@@ -614,7 +614,7 @@ bool lockFreeCuckoo<KeyType>::Contains(const KeyType &key) const {
 
 		if(checkCounter(cnt1,cnt2,ncnt1,ncnt2))
 			continue;
-		else 
+		else
 			return false;
 	}
 }
@@ -638,7 +638,7 @@ void lockFreeCuckoo<KeyType>::printTable()
 		}
 		else {
 			printf("%d\tNULL\n",i);
-		}	
+		}
 	}
 	printf("****************hash_table 2*******************\n");
 	for(int i = 0; i < t2Size; i++){
@@ -699,7 +699,7 @@ bool lockFreeCuckoo<KeyType>::moveToKey(const KeyType &searchKey) {
 
 		if(checkCounter(cnt1,cnt2,ncnt1,ncnt2))
 			continue;
-		else 
+		else
 			return false;
 	}
 }
@@ -742,7 +742,7 @@ void lockFreeCuckoo<KeyType>::ensureCapacity(uint32_t capacity) {
 		temp = extract_address(atomic_load_explicit(&oldTable1[i], memory_order_relaxed));
 		if (temp)
 			Insert(temp->value, temp->key);
-			
+
 	}
 	for (int i = 0; i < old2; i++) {
 		temp = extract_address(atomic_load_explicit(&oldTable2[i], memory_order_relaxed));
